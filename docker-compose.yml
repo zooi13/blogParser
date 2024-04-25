@@ -1,0 +1,27 @@
+version: '3'
+services:
+  php:
+    build:
+      context: ./docker/php
+    volumes:
+      - './src:/var/www/html'
+  nginx:
+    image: nginx:latest
+    ports:
+      - 8000:80
+    volumes:
+      - './src:/var/www/html'
+      - './docker/nginx/conf.d:/etc/nginx/conf.d'
+  mysql:
+    image: mysql:8
+    env_file:
+      - docker/env/mysql.env
+    volumes:
+      - './ftp/volume/mysql:/var/lib/mysql'
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      PMA_ARBITRARY: 1
